@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    container_name: bincom_test_postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=bincom_test_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: bincom_python_app
+    volumes:
+      - .:/app
+    environment:
+      # We use 'db' here because that is the service name above
+      - DATABASE_HOST=db
+      - DATABASE_NAME=bincom_test_db
+      - DATABASE_USER=admin
+      - DATABASE_PASS=pass
+    depends_on:
+      - db
+    # This keeps the container running so you can exec into it
+    tty: true 
+    stdin_open: true
+
+volumes:
+  postgres_data:

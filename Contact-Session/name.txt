@@ -1,0 +1,8 @@
+Alice
+Bob
+Charlie
+David
+Eve
+Frank
+
+https://meet.jit.si/BincomDevCenterPythonTeam

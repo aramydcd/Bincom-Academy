@@ -32,13 +32,13 @@ def main():
         for rank, boy, girl in matches:
             all_names.append(boy)
             all_names.append(girl)
-        return all_names
+        return matches, all_names
 
     # Step 3: Load baby2008.html file and extract names
     try:
         with open("baby2008.html", "r") as file:
             html_data = file.read()
-        baby_names = extract_names(html_data)
+        extracted_data, baby_names = extract_names(html_data)
         print(f"Extracted {len(baby_names)} names using Regex.")
     except FileNotFoundError:
         print("Error: baby2008.html not found. Please place it in the folder.")

@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=bincom_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://admin:pass@db:5432/bincom_db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

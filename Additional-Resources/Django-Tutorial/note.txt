@@ -32,7 +32,7 @@ Working on an existing project with its dependencies already pinned in a require
 
 ## Install App in your project setting: <project name> ---> settings.py ----> INSTALLED_APPS:
 INSTALLED_APPS = [
-    "<app name>.apps.PagesConfig",
+    "<app name>",
     ....
 ]
 
