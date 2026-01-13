@@ -10,10 +10,18 @@ class ScoreAnalyzer:
         self.intercept = None
         self.r_value = None
 
+
     def perform_regression(self):
+        # Data Cleaning: Force columns to be numeric, turning text/errors into 'NaN'
+        self.df['Hours'] = pd.to_numeric(self.df['Hours'], errors='coerce')
+        self.df['Scores'] = pd.to_numeric(self.df['Scores'], errors='coerce')
+
+        # Drop any rows that now have 'NaN' (missing or bad data)
+        self.df = self.df.dropna(subset=['Hours', 'Scores'])
+
         # x = Hours (Independent ==> CAUSE), y = Scores (Dependent ==> EFFECT)
-        x = self.df['hours']
-        y = self.df['scores']
+        x = self.df['Hours']
+        y = self.df['Scores']
         
         # The Math: y = mx + b ------> linear_reg = (slope * hours) + intercept
         res = stats.linregress(x, y)
@@ -35,15 +43,20 @@ class ScoreAnalyzer:
 
 def get_data(url, local_path):
     try:
-        # Attempt to fetch from Web
+        # Convert Google Edit link to Export link
         export_url = url.replace('/edit?usp=drivesdk', '/export?format=csv')
-        print("Fetched data from Google Sheets.")
-        # return pd.read_csv(export_url)
-        print(pd.read_csv(export_url))
-    except Exception:
+        df = pd.read_csv(export_url)
+        print("Successfully fetched from Google Sheets.")
+        return df        
+    except Exception as e:
         # Fallback to Local CSV
+        print(f"Network fetch failed ({e}). Checking local file...")
         if os.path.exists(local_path):
-            print("Web fetch failed. Loaded from local CSV.")
+            print(f"Loading local file: {local_path}")
             return pd.read_csv(local_path)
         else:
-            raise FileNotFoundError("Neither the URL nor the local file worked!")
+            print(f"ERROR: Local file '{local_path}' not found in {os.getcwd()}")
+            raise FileNotFoundError("Both Web and Local sources are unavailable.")
+        
+        
+ 
