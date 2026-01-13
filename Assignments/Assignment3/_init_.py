@@ -1,7 +1,7 @@
 import os
 import psycopg2
 
-def setup_db():
+def databaseConnectionSetup():
     db_host = os.getenv("DATABASE_HOST", "db") 
     
     conn = psycopg2.connect(

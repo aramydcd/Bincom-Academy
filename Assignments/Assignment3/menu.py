@@ -1,18 +1,5 @@
-from model import Fibonacci, Scrape_Save_BabyNames
+from model import Fibonacci
 from model import To_Do as Todo_App
-
-
-def saint():
-    # Implement a Fibonacci series generator.
-    # Perform crud operations.
-    User = Todo_App()
-    print("User Task")
-    User.view_task()
-    User.delete_task(4)
-    # save babynames (extracted previously with regex) to postgres table.
-    # file_obj = Scrape_Save_BabyNames("baby2008.html")
-
-    print(f"{'name'.center(30, "+")}")
 
 
 class Menu():
@@ -22,9 +9,10 @@ class Menu():
     
     def GeneralMenu(self):
         print(f"\n{' General Menu '.center(80,"#")}")
-        input_key = input("\nChoose from the menu below: Press\n1. Fibonacci\n2. To-Do App\n>> ".title())
+        input_key = input("\nChoose from the menu below: Press\n1. Fibonacci\n2. To-Do App\n0. Exit\n>> ".title())
         if input_key == "1": self.FibonacciGeneralMenu()
         elif input_key == "2": self.TodoAppMenu()
+        elif input_key == "0": self.exit_program()
         else: 
             print("Invalid Key")
             self.GeneralMenu()
@@ -52,19 +40,10 @@ class Menu():
                 print("Note: Only numerical value")
         
         print(f"\n{'#'*10} Fibonacci of {number} = {self.fibonacci_obj.fibonacci_of_num(number)}")
-        
-        while True:
-            again = input("\nDo you want to continue? Yes or No: ".title()).lower()
-            
-            if again == "yes": 
-                self.FibonacciMenu_1() 
-                break
-            elif again == "no": 
-                self.FibonacciGeneralMenu() 
-                break
-            else: print("Invalid Key")
-
-            
+                
+        self.goAgain(self.FibonacciMenu_1, self.FibonacciGeneralMenu)
+     
+       
     def FibonacciMenu_2(self):
         print(f"\n{' Fibonacci Series Generator '.center(80,"#")}")
         while True:
@@ -91,18 +70,9 @@ class Menu():
                 print(f"\n{'#'*10} Fibonacci Series Generator (List):{self.fibonacci_obj.fibonacci_series_generator_ls()}")
                 break
             else: print("Invalid Key")
-            
-        while True:
-            again = input("\nDo you want to continue? Yes or No: ".title()).lower()
-            
-            if again == "yes": 
-                self.FibonacciMenu_2() 
-                break
-            elif again == "no": 
-                self.FibonacciGeneralMenu() 
-                break
-            else: print("Invalid Key")
-
+        
+        self.goAgain(self.FibonacciMenu_2, self.FibonacciGeneralMenu)
+        
 
     def TodoAppMenu(self):
         print(f"\n{' To-Do App Menu '.center(80,"#")}")
@@ -130,24 +100,48 @@ class Menu():
                 print("Invalid Key")
 
         
-        
-        
     def TodoAppMenu_1(self):
         print(f"\n{' add new task '.center(80,"#")}")
         taskDescription = input("Enter Task: ")
         self.User.add_task(task=taskDescription)
+        self.goAgain(self.TodoAppMenu_1, self.TodoAppMenu)
+        
+        
     def TodoAppMenu_2(self):
         print(f"\n{' View task '.center(80,"#")}")
         self.User.view_task()
+        self.TodoAppMenu()
+        
+        
     def TodoAppMenu_3(self): 
         print(f"\n{' Edit task '.center(80,"#")}")
         try:
-            IdOfTaskToEdit = int("Enter ID of task you want to edit: ")
+            IdOfTaskToEdit = int(input("Enter ID of task you want to edit: "))
             self.User.edit_task(IdOfTaskToEdit)
         except ValueError:
             print("Only numerical value")
+        self.goAgain(self.TodoAppMenu_3, self.TodoAppMenu)
+        
+            
     def TodoAppMenu_4(self): 
         print(f"\n{' Delete Task '.center(80,"#")}")
-        IdOfTaskToDelete = int("Enter ID of task you want to delete: ")
+        IdOfTaskToDelete = int(input("Enter ID of task you want to delete: "))
         self.User.delete_task(IdOfTaskToDelete)
+        self.goAgain(self.TodoAppMenu_4, self.TodoAppMenu)
         
+    
+    def goAgain(self, yes, no):
+        while True:
+            again = input("\nDo you want to continue? Yes or No: ".title()).lower()
+            
+            if again == "yes": 
+                yes() 
+                break
+            elif again == "no": 
+                no()
+                break
+            else: print("Invalid Key")
+        
+    def exit_program(self):
+        print("Exiting Program... Goodbye!")
+        exit()

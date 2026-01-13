@@ -1,4 +1,4 @@
-from _init_ import setup_db
+from _init_ import databaseConnectionSetup
 
 
 class Fibonacci():
@@ -43,7 +43,7 @@ class Fibonacci():
 # Build a to-do list in python and use Postgres for persistent storage.
 class To_Do():
     def __init__(self):
-        self.conn = setup_db()
+        self.conn = databaseConnectionSetup()
         self.database_setup()        
         
     # Create a Postgres database with tables.
@@ -98,11 +98,12 @@ class To_Do():
         cur = self.conn.cursor()
         cur.execute("SELECT id FROM todo")
         all_id = cur.fetchall()
+        all_id = [id[0] for id in all_id]
         # print(f"All ID: {all_id}")
         if task_id in all_id: 
             cur.execute("DELETE FROM todo WHERE id = %s", (task_id,))
             self.conn.commit()
-            print(f"Task {task_id} deleted.")
+            print(f"Task with ID Number {task_id} deleted.")
             cur.close()
             self.view_task()
         else: print(f"No Task with ID Number {task_id}!")
@@ -112,7 +113,7 @@ class Scrape_Save_BabyNames():
     def __init__(self, html_file):
         self.html_file = html_file
         self.file_content = self.open_and_read_file()
-        self.conn = setup_db()
+        self.conn = databaseConnectionSetup()
         self.database_setup()      
         self.save_babynames_to_db()
           
