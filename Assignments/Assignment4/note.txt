@@ -1,0 +1,5 @@
+Given a csv file, extract the data and run linear regression analysis on data.
+https://docs.google.com/spreadsheets/d/1_Qh_v-AaoxoxK2nylHFKCTFduGWR2sQiXbeG11YqI5k/edit?usp=drivesdk
+
+
+student_scores.csv student_scores.csv22 November 2025, 2:08 AM
